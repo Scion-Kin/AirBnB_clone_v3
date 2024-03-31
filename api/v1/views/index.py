@@ -16,12 +16,14 @@ def status():
 def objects():
     ''' retrieves the number of objects by type '''
 
-    classes = ['Amenity', 'City', 'Place', 'Review', 'State', 'User']
+    classes = {'Amenity': 'amenities', 'City': 'cities',
+               'Place': 'places', 'Review': 'reviews',
+               'State': 'states', 'User': 'users'}
 
     len_all = {}
 
     for i in classes:
 
-        len_all[i] = storage.count(i)
+        len_all[classes[i]] = storage.count(i)
 
     return jsonify(len_all)
