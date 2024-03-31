@@ -2,7 +2,7 @@
 ''' This starts a Flask server/app '''
 
 from api.v1.views import app_views
-from flask import Flask
+from flask import Flask, make_response, jsonify
 from models import storage
 from os import getenv
 
@@ -16,6 +16,13 @@ def teardown_appcontext(code):
     ''' Closes / refreshes the database '''
 
     storage.close()
+
+
+@app.errorhandler(404)
+def not_found(error):
+    ''' Returns a not found JSON, on not found pages '''
+
+    return make_response(jsonify({"error": "Not found"}), 404)
 
 
 if __name__ == "__main__":
