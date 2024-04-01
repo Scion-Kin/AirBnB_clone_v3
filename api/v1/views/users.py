@@ -70,7 +70,7 @@ def user(user_id=None):
 
         user = got[0] if len(got) > 0 else abort(404)
         for key, value in request.get_json().items():
-            if key not in ['created_at', 'updated_at', 'id']:
+            if key not in ['created_at', 'updated_at', 'id', 'email']:
                 setattr(user, key, value)
         user.save()
 
