@@ -9,21 +9,21 @@ from models.state import State
 
 @app_views.route('/states', methods=['GET', 'DELETE', 'POST', 'PUT'],
                  strict_slashes=False)
-@app_views.route('/states/<state_id>', methods=['GET', 'DELETE', 'POST', 'PUT'],
-                 strict_slashes=False)
-def state(id=None):
+@app_views.route('/states/<state_id>', methods=['GET', 'DELETE', 'POST', 'PUT']
+                 , strict_slashes=False)
+def state(state_id=None):
     ''' The route the handles the state objects '''
 
     if request.method == 'GET':
         all = storage.all("State")
-        if id is None:
+        if state_id is None:
 
             got = [i.to_dict() for i in all.values()]
             return jsonify(got)
 
         else:
             state = ([state for state in all.values() if state.id
-                     == id])
+                     == state_id])
             return jsonify(state[0].to_dict() if len(state) > 0 else abort(
                 404))
 
@@ -36,7 +36,7 @@ def state(id=None):
         return jsonify({})
 
     elif request.method == 'POST':
-        if not request.get_json() or id:
+        if not request.get_json() or state_id:
             return make_response(jsonify({"error": "Not a JSON"}), 400)
 
         else:
@@ -52,11 +52,11 @@ def state(id=None):
         if not request.get_json():
             return make_response(jsonify({"error": "Not a JSON"}), 400)
 
-        if not id:
+        if not state_id:
             abort(404)
 
         all = storage.all("State")
-        got = [state for state in all.values() if state.id == id]
+        got = [state for state in all.values() if state.id == state_id]
 
         state = got[0] if len(got) > 0 else abort(404)
         for key, value in request.get_json().items():
