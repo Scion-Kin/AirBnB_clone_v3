@@ -22,9 +22,10 @@ def teardown_appcontext(code):
 def not_found(error):
     ''' Returns a not found JSON, on not found pages '''
 
+    print(error)
     return make_response(jsonify({"error": "Not found"}), 404)
 
 
 if __name__ == "__main__":
     app.run(host=getenv('HBNB_API_HOST'), port=getenv('HBNB_API_PORT'),
-            threaded=True)
+            threaded=True, debug=True)

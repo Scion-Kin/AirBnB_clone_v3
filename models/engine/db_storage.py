@@ -81,7 +81,7 @@ class DBStorage:
 
         cls_list = self.all(cls)
 
-        key_id = cls.__name__ + '.' + id
+        key_id = classes[cls].__name__ + '.' + id
 
         for i in cls_list:
 
