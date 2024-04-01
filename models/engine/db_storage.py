@@ -81,13 +81,14 @@ class DBStorage:
 
         cls_list = self.all(cls)
 
-        key_id = classes[cls].__name__ + '.' + id
+        if type(cls) == str:
+            key_id = classes[cls].__name__ + '.' + id
+        else:
+            key_id = cls.__name__ + '.' + id
 
         for i in cls_list:
-
             if i == key_id:
                 return cls_list[i]
-
         return None
 
     def count(self, cls=None):
@@ -95,11 +96,7 @@ class DBStorage:
         If no class is passed, returns the count of all objects in storage. """
 
         if cls:
-            items = self.all(cls)
-
-            return len(items)
+            return len(self.all(cls))
 
         else:
-            items = self.all()
-
-            return len(items)
+            return len(self.all())

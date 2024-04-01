@@ -2,9 +2,8 @@
 ''' The index of the blueprint '''
 from api.v1.views import app_views
 from flask import Flask, Blueprint
-from flask import jsonify, request, make_response
+from flask import jsonify, request, abort
 from models import storage
-from models.state import State
 import json
 
 
@@ -27,7 +26,7 @@ def state(id=None):
 
 
     elif request.method == 'DELETE':
-        state = storage.get("State", id)
+        state = storage.get("State", id) if id else abort(404)
         if state:
             state.delete()
             storage.save()
