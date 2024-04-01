@@ -27,7 +27,7 @@ def get_places(city_id):
 
         else:
             user_exists = ([user for user in storage.all("User")
-                           if user.id == request.get_json()["user_id"]])
+                           if user.id == request.get_json()['user_id']])
             city_exists = ([city for city in storage.all(
                            "City") if city.id == city_id])
             if len(city_exists) < 1 and len(user_exists) < 1:
@@ -64,7 +64,8 @@ def get_place(place_id):
 
         place = got[0] if len(got) > 0 else abort(404)
         for key, value in request.get_json().items():
-            if key not in ['created_at', 'updated_at', 'id']:
+            if key not in ['created_at', 'updated_at',
+                           'id', 'user_id', 'city_id']:
                 setattr(place, key, value)
         place.save()
 
