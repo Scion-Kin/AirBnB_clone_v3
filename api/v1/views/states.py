@@ -14,7 +14,6 @@ def state(id=None):
     ''' The route the handles the state objects '''
 
     if request.method == 'GET':
-
         all = storage.all("State")
         if id is None:
 
