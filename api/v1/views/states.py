@@ -12,7 +12,7 @@ from models.state import State
 @app_views.route('/states/<id>', methods=['GET', 'DELETE', 'POST', 'PUT'],
                  strict_slashes=False)
 def state(id=None):
-    ''' The route the handles the state object queries'''
+    ''' The route the handles the state objects '''
 
     if request.method == 'GET':
         all = storage.all("State")
@@ -56,10 +56,13 @@ def state(id=None):
         if not id:
             abort(404)
 
-        state = storage.get("State", id)
+        all = storage.all("State")
+        got = [state for state in all.values() if state.id == id]
 
+        state = got[0] if len(got) > 0 else abort(404)
         for key, value in request.get_json().items():
             if key not in ['created_at', 'updated_at', 'id']:
                 setattr(state, key, value)
+        state.save()
 
-        return jsonify(state.to_dict())
+        return (jsonify(state.to_dict()))
