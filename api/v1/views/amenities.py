@@ -9,7 +9,8 @@ from models.amenity import Amenity
 
 @app_views.route('/amenities', methods=['GET', 'DELETE', 'POST', 'PUT'],
                  strict_slashes=False)
-@app_views.route('/amenities/<amenity_id>', methods=['GET', 'DELETE', 'POST', 'PUT'],
+@app_views.route('/amenities/<amenity_id>',
+                 methods=['GET', 'DELETE', 'POST', 'PUT'],
                  strict_slashes=False)
 def amenity(amenity_id=None):
     ''' The route the handles the amenity objects '''
@@ -23,12 +24,13 @@ def amenity(amenity_id=None):
 
         else:
             amenity = ([amenity for amenity in all.values() if amenity.id
-                     == amenity_id])
+                       == amenity_id])
             return jsonify(amenity[0].to_dict() if len(amenity) > 0 else abort(
                 404))
 
     elif request.method == 'DELETE':
-        amenity = storage.get("Amenity", amenity_id) if amenity_id else abort(404)
+        amenity = (storage.get("Amenity", amenity_id)
+                   if amenity_id else abort(404))
         if amenity:
             amenity.delete()
             storage.save()
