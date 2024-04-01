@@ -7,62 +7,69 @@ from models import storage
 from models.city import City
 
 
-@app_views.route('/cities', methods=['GET', 'DELETE', 'POST', 'PUT'],
-                 strict_slashes=False)
-@app_views.route('/cities/<id>', methods=['GET', 'DELETE', 'POST', 'PUT'],
-                 strict_slashes=False)
-def city(id=None):
-    ''' The route the handles the city objects '''
+@app_views.route('/states/<state_id>/cities',
+                 methods=['GET'], strict_slashes=False)
+def get_cities(state_id):
+    ''' gets all cities by a state id '''
 
-    if request.method == 'GET':
-        all = storage.all("City")
-        if id is None:
+    cities = [city.to_dict() for city in storage.all("City").values() if city.state_id == state_id]
+    return jsonify(cities) if len(cities) > 0 else abort(404)
 
-            got = [i.to_dict() for i in all.values()]
-            return jsonify(got)
+@app_views.route('/cities/<city_id>', methods=['GET'], strict_slashes=False)
+def get_city(city_id):
+    ''' Gets a city by its id '''
 
-        else:
-            city = ([city for city in all.values() if city.id
-                     == id])
-            return jsonify(city[0].to_dict() if len(city) > 0 else abort(
-                404))
+    all = storage.all("City")
+    all = [city for city in all.values() if city.id == city_id]
 
-    elif request.method == 'DELETE':
-        city = storage.get("City", id) if id else abort(404)
-        if city:
-            city.delete()
-            storage.save()
-            return jsonify({})
+    return jsonify(all[0].to_dict()) if len(all) > 0 else abort(404)
 
-        abort(404)
+@app_views.route('/cities/<city_id>', methods=['DELETE'], strict_slashes=False)
+def destroy_city(city_id):
+    ''' Deletes a city from a database '''
 
-    elif request.method == 'POST':
-        if not request.get_json() or id:
-            return make_response(jsonify({"error": "Not a JSON"}), 400)
+    all = storage.all("City")
+    all = [city for city in all.values() if city.id == city_id]
+    city = all[0] if len(all) > 0 else abort(404)
+    city.delete()
+    storage.save()
+    return jsonify({})
 
-        else:
-            if "name" in request.get_json():
-                new = City(**request.get_json())
-                new.save()
-                return make_response(jsonify(new.to_dict()), 201)
+@app_views.route('/states/<state_id>/cities',
+                 methods=['POST'], strict_slashes=False)
+def create(state_id):
+    ''' create a new city '''
 
-            else:
-                return make_response(jsonify({"error": "Missing name"}), 400)
+    if not request.get_json() or not state_id:
+        return make_response(jsonify({"error": "Not a JSON"}), 400)
 
     else:
-        if not request.get_json():
-            return make_response(jsonify({"error": "Not a JSON"}), 400)
+        if "name" in request.get_json():
+            new = City(state_id=state_id, **request.get_json())
+            new.save()
+            return make_response(jsonify(new.to_dict()), 201)
 
-        if not id:
-            abort(404)
+        else:
+            return make_response(jsonify({"error": "Missing name"}), 400)
 
-        all = storage.all("city")
-        got = [city for city in all.values() if city.id == id]
+@app_views.route('/cities/<city_id>',
+                 methods=['PUT'], strict_slashes=False)
+def update(city_id):
+    ''' updates a city in the database '''
 
-        city = got[0] if len(got) > 0 else abort(404)
-        for key, value in request.get_json().items():
-            if key not in ['created_at', 'updated_at', 'id']:
-                setattr(city, key, value)
-        city.save()
+    if not request.get_json():
+        return make_response(jsonify({"error": "Not a JSON"}), 400)
 
-        return (jsonify(city.to_dict()))
+    if not city_id:
+        abort(404)
+
+    all = storage.all("City")
+    got = [city for city in all.values() if city.id == city_id]
+
+    city = got[0] if len(got) > 0 else abort(404)
+    for key, value in request.get_json().items():
+        if key not in ['created_at', 'updated_at', 'id']:
+            setattr(city, key, value)
+    city.save()
+
+    return (jsonify(city.to_dict()))
