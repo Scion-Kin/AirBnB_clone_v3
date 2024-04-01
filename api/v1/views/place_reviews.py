@@ -34,7 +34,7 @@ def get_reviews(place_id):
             if len(place_exists) < 1 and len(user_exists) < 1:
                 abort(404)
             if "name" in request.get_json():
-                new = review(place_id=place_id, **request.get_json())
+                new = Review(place_id=place_id, **request.get_json())
                 new.save()
                 return make_response(jsonify(new.to_dict()), 201)
 

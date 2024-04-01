@@ -33,7 +33,7 @@ def get_places(city_id):
             if len(city_exists) < 1 and len(user_exists) < 1:
                 abort(404)
             if "name" in request.get_json():
-                new = place(city_id=city_id, **request.get_json())
+                new = Place(city_id=city_id, **request.get_json())
                 new.save()
                 return make_response(jsonify(new.to_dict()), 201)
 
