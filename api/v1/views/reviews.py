@@ -14,7 +14,8 @@ def get_reviews(place_id):
 
     if request.method == 'GET':
         reviews = ([review.to_dict() for review in
-                  storage.all("Review").values() if review.place_id == place_id])
+                   storage.all("Review").values()
+                   if review.place_id == place_id])
         return jsonify(reviews) if len(reviews) > 0 else abort(404)
 
     else:
