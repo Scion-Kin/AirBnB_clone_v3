@@ -27,7 +27,8 @@ def get_place(place_id):
     return jsonify(all[0].to_dict()) if len(all) > 0 else abort(404)
 
 
-@app_views.route('/places/<place_id>', methods=['DELETE'], strict_slashes=False)
+@app_views.route('/places/<place_id>',
+                 methods=['DELETE'], strict_slashes=False)
 def destroy_place(place_id):
     ''' Deletes a place from a database '''
 
