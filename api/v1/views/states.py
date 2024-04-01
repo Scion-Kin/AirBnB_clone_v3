@@ -7,9 +7,10 @@ from models import storage
 from models.state import State
 
 
-#@app_views.route('/states', methods=['GET', 'DELETE', 'POST', 'PUT'])
-@app_views.route('/states/', methods=['GET', 'DELETE', 'POST', 'PUT'])
-@app_views.route('/states/<id>', methods=['GET', 'DELETE', 'POST', 'PUT'])
+@app_views.route('/states', methods=['GET', 'DELETE', 'POST', 'PUT'],
+                 strict_slashes=False)
+@app_views.route('/states/<id>', methods=['GET', 'DELETE', 'POST', 'PUT'],
+                 strict_slashes=False)
 def state(id=None):
     ''' The route the handles the state objects '''
 
