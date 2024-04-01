@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 ''' The index of the blueprint '''
 from api.v1.views import app_views
+from flask import Flask, Blueprint
 from flask import jsonify, request, abort, make_response
 from models import storage
 from models.state import State
@@ -11,7 +12,7 @@ from models.state import State
 @app_views.route('/states/<id>', methods=['GET', 'DELETE', 'POST', 'PUT'],
                  strict_slashes=False)
 def state(id=None):
-    ''' The route the handles the state objects queries'''
+    ''' The route the handles the state object queries'''
 
     if request.method == 'GET':
         all = storage.all("State")
