@@ -4,36 +4,37 @@ from api.v1.views import app_views
 from flask import Flask, Blueprint
 from flask import jsonify, request, abort, make_response
 from models import storage
-from models.state import State
+from models.amenity import Amenity
 
 
-@app_views.route('/states', methods=['GET', 'DELETE', 'POST', 'PUT'],
+@app_views.route('/amenities', methods=['GET', 'DELETE', 'POST', 'PUT'],
                  strict_slashes=False)
-@app_views.route('/states/<state_id>', methods=['GET', 'DELETE', 'POST', 'PUT'],
+@app_views.route('/amenities/<amenity_id>', methods=['GET', 'DELETE', 'POST', 'PUT'],
                  strict_slashes=False)
-def state(id=None):
-    ''' The route the handles the state objects '''
+def amenity(amenity_id=None):
+    ''' The route the handles the amenity objects '''
 
     if request.method == 'GET':
-        all = storage.all("State")
-        if id is None:
+        all = storage.all("Amenity")
+        if amenity_id is None:
 
             got = [i.to_dict() for i in all.values()]
             return jsonify(got)
 
         else:
-            state = ([state for state in all.values() if state.id
-                     == id])
-            return jsonify(state[0].to_dict() if len(state) > 0 else abort(
+            amenity = ([amenity for amenity in all.values() if amenity.id
+                     == amenity_id])
+            return jsonify(amenity[0].to_dict() if len(amenity) > 0 else abort(
                 404))
 
     elif request.method == 'DELETE':
-        all = storage.all("State")
-        all = [state for state in all.values() if state.id == state_id]
-        state = all[0] if len(all) > 0 else abort(404)
-        state.delete()
-        storage.save()
-        return jsonify({})
+        amenity = storage.get("Amenity", amenity_id) if amenity_id else abort(404)
+        if amenity:
+            amenity.delete()
+            storage.save()
+            return jsonify({})
+
+        abort(404)
 
     elif request.method == 'POST':
         if not request.get_json() or id:
@@ -41,7 +42,7 @@ def state(id=None):
 
         else:
             if "name" in request.get_json():
-                new = State(**request.get_json())
+                new = Amenity(**request.get_json())
                 new.save()
                 return make_response(jsonify(new.to_dict()), 201)
 
@@ -55,13 +56,13 @@ def state(id=None):
         if not id:
             abort(404)
 
-        all = storage.all("State")
-        got = [state for state in all.values() if state.id == id]
+        all = storage.all("Amenity")
+        got = [amenity for amenity in all.values() if amenity.id == id]
 
-        state = got[0] if len(got) > 0 else abort(404)
+        amenity = got[0] if len(got) > 0 else abort(404)
         for key, value in request.get_json().items():
             if key not in ['created_at', 'updated_at', 'id']:
-                setattr(state, key, value)
-        state.save()
+                setattr(amenity, key, value)
+        amenity.save()
 
-        return (jsonify(state.to_dict()))
+        return (jsonify(amenity.to_dict()))
