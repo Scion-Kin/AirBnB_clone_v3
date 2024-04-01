@@ -7,7 +7,7 @@ from models import storage
 from models.state import State
 
 
-@app_views.route('/states', methods=['GET', 'DELETE', 'POST', 'PUT'])
+#@app_views.route('/states', methods=['GET', 'DELETE', 'POST', 'PUT'])
 @app_views.route('/states/', methods=['GET', 'DELETE', 'POST', 'PUT'])
 @app_views.route('/states/<id>', methods=['GET', 'DELETE', 'POST', 'PUT'])
 def state(id=None):
