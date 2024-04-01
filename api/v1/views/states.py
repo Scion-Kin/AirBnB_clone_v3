@@ -36,7 +36,7 @@ def state(id=None):
         abort(404)
 
     elif request.method == 'POST':
-        if not request.get_json():
+        if not request.get_json() or id:
             return make_response(jsonify({"error": "Not a JSON"}), 400)
 
         else:
@@ -58,10 +58,10 @@ def state(id=None):
         all = storage.all("State")
         got = [state for state in all.values() if state.id == id]
 
-        state = got[0]
+        state = got[0] if len(got) > 0 else abort(404)
         for key, value in request.get_json().items():
             if key not in ['created_at', 'updated_at', 'id']:
                 setattr(state, key, value)
         state.save()
 
-        return (state.to_dict())
+        return (jsonify(state.to_dict()))
