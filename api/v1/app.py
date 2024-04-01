@@ -8,7 +8,7 @@ from models import storage
 from os import getenv
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app)
 
 app.register_blueprint(app_views, url_prefix='/api/v1')
 
