@@ -56,13 +56,10 @@ def state(id=None):
         if not id:
             abort(404)
 
-        all = storage.all("State")
-        got = [state for state in all.values() if state.id == id]
+        state = storage.get("State", id)
 
-        state = got[0] if len(got) > 0 else abort(404)
         for key, value in request.get_json().items():
             if key not in ['created_at', 'updated_at', 'id']:
                 setattr(state, key, value)
-        state.save()
 
-        return (jsonify(state.to_dict()))
+        return jsonify(state.to_dict())
