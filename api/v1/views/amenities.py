@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 ''' The index of the blueprint '''
 from api.v1.views import app_views
-from flask import Flask, Blueprint
-from flask import jsonify, request, abort, make_response
+from flask import Flask, Blueprint, jsonify, request, abort, make_response
 from models import storage
 from models.amenity import Amenity
 
