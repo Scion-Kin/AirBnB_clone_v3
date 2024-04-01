@@ -9,8 +9,9 @@ from models.state import State
 
 @app_views.route('/states', methods=['GET', 'DELETE', 'POST', 'PUT'],
                  strict_slashes=False)
-@app_views.route('/states/<state_id>', methods=['GET', 'DELETE', 'POST', 'PUT']
-                 , strict_slashes=False)
+@app_views.route('/states/<state_id>',
+                 methods=['GET', 'DELETE', 'POST', 'PUT'],
+                 strict_slashes=False)
 def state(state_id=None):
     ''' The route the handles the state objects '''
 
