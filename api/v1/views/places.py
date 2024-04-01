@@ -14,7 +14,7 @@ def get_places(city_id):
 
     if request.method == 'GET':
         places = ([place.to_dict() for place in
-                storage.all("place").values() if place.city_id == city_id])
+                  storage.all("place").values() if place.city_id == city_id])
         return jsonify(places) if len(places) > 0 else abort(404)
 
     else:
@@ -26,8 +26,8 @@ def get_places(city_id):
             return make_response(jsonify({"error": "Missing user_id"}), 400)
 
         else:
-            user_exists = ([user for user in storage.all(
-                           "User") if user.id == request.get_json()["user_id"]])
+            user_exists = ([user for user in storage.all("User")
+                           if user.id == request.get_json()["user_id"]])
             city_exists = ([city for city in storage.all(
                            "City") if city.id == city_id])
             if len(city_exists) < 1 and len(user_exists) < 1:
