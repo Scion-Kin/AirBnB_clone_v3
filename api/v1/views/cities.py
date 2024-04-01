@@ -12,8 +12,10 @@ from models.city import City
 def get_cities(state_id):
     ''' gets all cities by a state id '''
 
-    cities = [city.to_dict() for city in storage.all("City").values() if city.state_id == state_id]
+    cities = ([city.to_dict() for city in
+              storage.all("City").values() if city.state_id == state_id])
     return jsonify(cities) if len(cities) > 0 else abort(404)
+
 
 @app_views.route('/cities/<city_id>', methods=['GET'], strict_slashes=False)
 def get_city(city_id):
@@ -23,6 +25,7 @@ def get_city(city_id):
     all = [city for city in all.values() if city.id == city_id]
 
     return jsonify(all[0].to_dict()) if len(all) > 0 else abort(404)
+
 
 @app_views.route('/cities/<city_id>', methods=['DELETE'], strict_slashes=False)
 def destroy_city(city_id):
@@ -34,6 +37,7 @@ def destroy_city(city_id):
     city.delete()
     storage.save()
     return jsonify({})
+
 
 @app_views.route('/states/<state_id>/cities',
                  methods=['POST'], strict_slashes=False)
@@ -51,6 +55,7 @@ def create(state_id):
 
         else:
             return make_response(jsonify({"error": "Missing name"}), 400)
+
 
 @app_views.route('/cities/<city_id>',
                  methods=['PUT'], strict_slashes=False)
