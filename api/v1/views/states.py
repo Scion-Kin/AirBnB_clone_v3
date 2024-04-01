@@ -11,7 +11,7 @@ from models.state import State
 @app_views.route('/states/<id>', methods=['GET', 'DELETE', 'POST', 'PUT'],
                  strict_slashes=False)
 def state(id=None):
-    ''' The route the handles the state objects' queries'''
+    ''' The route the handles the state objects queries'''
 
     if request.method == 'GET':
         all = storage.all("State")
