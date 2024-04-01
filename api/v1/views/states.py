@@ -22,9 +22,10 @@ def state(id=None):
             return jsonify(got)
 
         else:
-            state = ([state.to_dict() for state in all.values() if state.id
+            state = ([state for state in all.values() if state.id
                      == id])
-            return jsonify(state[0] if len(state) > 0 else abort(404))
+            return jsonify(state[0].to_dict() if len(state) > 0 else abort(
+                404))
 
     elif request.method == 'DELETE':
         state = storage.get("State", id) if id else abort(404)
@@ -43,7 +44,7 @@ def state(id=None):
             if "name" in request.get_json():
                 new = State(**request.get_json())
                 new.save()
-                return new.to_dict()
+                return make_response(jsonify(new.to_dict()), 201)
 
             else:
                 return make_response(jsonify({"error": "Missing name"}), 400)
