@@ -22,7 +22,7 @@ def get_and_make_places(city_id):
                   storage.all("Place").values() if place.city_id == city_id])
         return jsonify(places) if len(places) > 0 else jsonify([])
 
-    elif request.method == 'POST':
+    elif request.method == 'POST' and request.get_json():
         ''' create a new place '''
         city = [city for city in storage.all("City").values()
                 if city.id == city_id]
