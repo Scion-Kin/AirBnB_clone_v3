@@ -14,7 +14,7 @@ def get_cities(state_id):
 
     cities = ([city.to_dict() for city in
               storage.all("City").values() if city.state_id == state_id])
-    return jsonify(cities) if len(cities) > 0 else abort(404)
+    return jsonify(cities) if len(cities) > 0 else jsonify([])
 
 
 @app_views.route('/cities/<string:city_id>',
