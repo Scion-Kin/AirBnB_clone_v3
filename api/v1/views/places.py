@@ -22,8 +22,11 @@ def get_and_make_places(city_id):
                   storage.all("Place").values() if place.city_id == city_id])
         return jsonify(places) if len(places) > 0 else jsonify([])
 
-    elif request.method == 'POST' and request.get_json():
+    elif request.method == 'POST':
         ''' create a new place '''
+        if not request.get_json():
+            return make_response(jsonify({"error": "Not a JSON"}), 400)
+
         city = [city for city in storage.all("City").values()
                 if city.id == city_id]
         if len(city) < 1:
@@ -69,6 +72,7 @@ def get_destroy_and_update_places(place_id):
 
     elif request.method == 'PUT':
         ''' updates a place in the database '''
+
         if request.get_json():
             all = storage.all("Place")
             got = [place for place in all.values() if place.id == place_id]
@@ -81,3 +85,5 @@ def get_destroy_and_update_places(place_id):
             place.save()
 
             return (jsonify(place.to_dict()))
+
+        return make_response(jsonify({"error": "Not a JSON"}), 400)
