@@ -69,15 +69,15 @@ def get_destroy_and_update_places(place_id):
 
     elif request.method == 'PUT':
         ''' updates a place in the database '''
+        if request.get_json():
+            all = storage.all("Place")
+            got = [place for place in all.values() if place.id == place_id]
 
-        all = storage.all("Place")
-        got = [place for place in all.values() if place.id == place_id]
+            place = got[0] if len(got) > 0 else abort(404)
+            for key, value in request.get_json().items():
+                if key not in ['created_at', 'updated_at',
+                               'city_id', 'id', 'user_id']:
+                    setattr(place, key, value)
+            place.save()
 
-        place = got[0] if len(got) > 0 else abort(404)
-        for key, value in request.get_json().items():
-            if key not in ['created_at', 'updated_at',
-                           'city_id', 'id', 'user_id']:
-                setattr(place, key, value)
-        place.save()
-
-        return (jsonify(place.to_dict()))
+            return (jsonify(place.to_dict()))
