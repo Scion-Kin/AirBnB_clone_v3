@@ -41,13 +41,13 @@ def get_and_make_reviews(place_id):
         if len(user) < 1:
             abort(404)
 
-        if "name" in request.get_json():
+        if "text" in request.get_json():
             new = Review(place_id=place_id, **request.get_json())
             new.save()
             return make_response(jsonify(new.to_dict()), 201)
 
         else:
-            return make_response(jsonify({"error": "Missing name"}), 400)
+            return make_response(jsonify({"error": "Missing text"}), 400)
 
 
 @app_views.route('/reviews/<string:review_id>',
