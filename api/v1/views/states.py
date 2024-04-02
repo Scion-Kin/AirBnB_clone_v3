@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-''' The index of the blueprint. This blueprint has a different
+''' The states blueprint. This blueprint has a different
 structure than others. It's 100% intentional. However,
 if there is any error, replace it with "amenities" blueprint structure '''
 

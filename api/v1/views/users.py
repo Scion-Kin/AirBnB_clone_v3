@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-''' The index of the blueprint '''
+''' The users blueprint '''
 from api.v1.views import app_views
 from flask import Flask, Blueprint
 from flask import jsonify, request, abort, make_response
