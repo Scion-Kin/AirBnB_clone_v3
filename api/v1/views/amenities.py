@@ -12,6 +12,7 @@ def all_amenities():
     got = [i.to_dict() for i in all.values()]
     return jsonify(got)
 
+
 @app_views.route('/amenities/<string:amenity_id>', methods=['GET'],
                  strict_slashes=False)
 def get_amenity(amenity_id):
@@ -23,11 +24,12 @@ def get_amenity(amenity_id):
     return jsonify(amenity[0].to_dict() if len(amenity) > 0 else abort(
         404))
 
+
 @app_views.route('/amenities/<string:amenity_id>',
                  methods=['DELETE'], strict_slashes=False)
 def destroy(amenity_id):
     amenity = (storage.get("Amenity", amenity_id)
-                   if amenity_id else abort(404))
+               if amenity_id else abort(404))
     if amenity:
         amenity.delete()
         storage.save()
@@ -38,13 +40,14 @@ def destroy(amenity_id):
 
 @app_views.route('/amenities', methods=['POST'], strict_slashes=False)
 def create_amenity():
-        if "name" in request.get_json():
-            new = Amenity(**request.get_json())
-            new.save()
-            return make_response(jsonify(new.to_dict()), 201)
+    if "name" in request.get_json():
+        new = Amenity(**request.get_json())
+        new.save()
+        return make_response(jsonify(new.to_dict()), 201)
 
-        else:
-            return make_response(jsonify({"error": "Missing name"}), 400)
+    else:
+        return make_response(jsonify({"error": "Missing name"}), 400)
+
 
 @app_views.route('/amenities/<string:amenity_id>',
                  methods=['PUT'], strict_slashes=False)
