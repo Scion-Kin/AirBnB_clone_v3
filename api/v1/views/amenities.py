@@ -38,7 +38,8 @@ def amenity(amenity_id=None):
         abort(404)
 
     elif request.method == 'POST':
-        if not request.get_json() or amenity_id:
+        print(request.get_json())
+        if not request.get_json():
             return make_response(jsonify({"error": "Not a JSON"}), 400)
 
         else:
@@ -67,3 +68,7 @@ def amenity(amenity_id=None):
         amenity.save()
 
         return (jsonify(amenity.to_dict()))
+
+@app_views.errorhandler(415)
+def not_a_json(error):
+    return make_response(jsonify({"error": "Not a JSON"}), 400)
