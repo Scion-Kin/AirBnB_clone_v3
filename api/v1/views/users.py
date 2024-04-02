@@ -36,7 +36,8 @@ def user(user_id=None):
             storage.save()
             return jsonify({})
 
-        abort(404)
+        else:
+            abort(404)
 
     elif request.method == 'POST':
         if not request.get_json() or user_id:
@@ -50,13 +51,9 @@ def user(user_id=None):
                 return make_response(jsonify(
                     {"error": "Missing password"}), 400)
 
-            if "name" in request.get_json():
-                new = User(**request.get_json())
-                new.save()
-                return make_response(jsonify(new.to_dict()), 201)
-
-            else:
-                return make_response(jsonify({"error": "Missing name"}), 400)
+            new = User(**request.get_json())
+            new.save()
+            return make_response(jsonify(new.to_dict()), 201)
 
     else:
         if not request.get_json():
