@@ -16,6 +16,7 @@ def get_cities(state_id):
              if state.id == state_id]
     if len(state) < 1:
         abort(404)
+
     cities = ([city.to_dict() for city in
               storage.all("City").values() if city.state_id == state_id])
     return jsonify(cities) if len(cities) > 0 else jsonify([])
@@ -49,6 +50,10 @@ def destroy_city(city_id):
                  methods=['POST'], strict_slashes=False)
 def create(state_id):
     ''' create a new city '''
+    state = [state for state in storage.all("State").values()
+             if state.id == state_id]
+    if len(state) < 1:
+        abort(404)
 
     if "name" in request.get_json():
         new = City(state_id=state_id, **request.get_json())
