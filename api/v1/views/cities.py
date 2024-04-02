@@ -7,7 +7,7 @@ from models import storage
 from models.city import City
 
 
-@app_views.route('/states/<state_id>/cities',
+@app_views.route('/states/<string:state_id>/cities',
                  methods=['GET'], strict_slashes=False)
 def get_cities(state_id):
     ''' gets all cities by a state id '''
@@ -17,7 +17,8 @@ def get_cities(state_id):
     return jsonify(cities) if len(cities) > 0 else abort(404)
 
 
-@app_views.route('/cities/<city_id>', methods=['GET'], strict_slashes=False)
+@app_views.route('/cities/<string:city_id>',
+                 methods=['GET'], strict_slashes=False)
 def get_city(city_id):
     ''' Gets a city by its id '''
 
@@ -27,7 +28,8 @@ def get_city(city_id):
     return jsonify(all[0].to_dict()) if len(all) > 0 else abort(404)
 
 
-@app_views.route('/cities/<city_id>', methods=['DELETE'], strict_slashes=False)
+@app_views.route('/cities/<string:city_id>',
+                 methods=['DELETE'], strict_slashes=False)
 def destroy_city(city_id):
     ''' Deletes a city from a database '''
 
@@ -39,31 +41,24 @@ def destroy_city(city_id):
     return jsonify({})
 
 
-@app_views.route('/states/<state_id>/cities',
+@app_views.route('/states/<string:state_id>/cities',
                  methods=['POST'], strict_slashes=False)
 def create(state_id):
     ''' create a new city '''
 
-    if not request.get_json() or not state_id:
-        return make_response(jsonify({"error": "Not a JSON"}), 400)
+    if "name" in request.get_json():
+        new = City(state_id=state_id, **request.get_json())
+        new.save()
+        return make_response(jsonify(new.to_dict()), 201)
 
     else:
-        if "name" in request.get_json():
-            new = City(state_id=state_id, **request.get_json())
-            new.save()
-            return make_response(jsonify(new.to_dict()), 201)
-
-        else:
-            return make_response(jsonify({"error": "Missing name"}), 400)
+       return make_response(jsonify({"error": "Missing name"}), 400)
 
 
-@app_views.route('/cities/<city_id>',
+@app_views.route('/cities/<string:city_id>',
                  methods=['PUT'], strict_slashes=False)
 def update(city_id):
     ''' updates a city in the database '''
-
-    if not request.get_json():
-        return make_response(jsonify({"error": "Not a JSON"}), 400)
 
     if not city_id:
         abort(404)
