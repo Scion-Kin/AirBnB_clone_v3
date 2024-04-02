@@ -27,6 +27,12 @@ def not_found(error):
     return make_response(jsonify({"error": "Not found"}), 404)
 
 
+@app.errorhandler(415)
+def not_a_json(error):
+    ''' Handles an invalid media type submission '''
+    return make_response(jsonify({"error": "Not a JSON"}), 400)
+
+
 if __name__ == "__main__":
     app.run(host=getenv('HBNB_API_HOST'), port=getenv('HBNB_API_PORT'),
             threaded=True, debug=True)

@@ -38,22 +38,16 @@ def amenity(amenity_id=None):
         abort(404)
 
     elif request.method == 'POST':
-        if not request.get_json() or amenity_id:
-            return make_response(jsonify({"error": "Not a JSON"}), 400)
+
+        if "name" in request.get_json():
+            new = Amenity(**request.get_json())
+            new.save()
+            return make_response(jsonify(new.to_dict()), 201)
 
         else:
-            if "name" in request.get_json():
-                new = Amenity(**request.get_json())
-                new.save()
-                return make_response(jsonify(new.to_dict()), 201)
-
-            else:
-                return make_response(jsonify({"error": "Missing name"}), 400)
+            return make_response(jsonify({"error": "Missing name"}), 400)
 
     else:
-        if not request.get_json():
-            return make_response(jsonify({"error": "Not a JSON"}), 400)
-
         if not amenity_id:
             abort(404)
 
