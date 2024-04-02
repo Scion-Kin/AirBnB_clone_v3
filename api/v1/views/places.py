@@ -47,7 +47,7 @@ def get_and_make_places(city_id):
 
 
 @app_views.route('/places/<string:place_id>',
-                 methods=['GET'], strict_slashes=False)
+                 methods=['GET', 'DELETE', 'PUT'], strict_slashes=False)
 def get_destroy_and_update_places(place_id):
     ''' Gets, deletes and updates a place by its id '''
 
