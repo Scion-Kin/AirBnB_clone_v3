@@ -37,22 +37,15 @@ def state(state_id=None):
         return jsonify({})
 
     elif request.method == 'POST':
-        if not request.get_json() or state_id:
-            return make_response(jsonify({"error": "Not a JSON"}), 400)
+        if "name" in request.get_json():
+            new = State(**request.get_json())
+            new.save()
+            return make_response(jsonify(new.to_dict()), 201)
 
         else:
-            if "name" in request.get_json():
-                new = State(**request.get_json())
-                new.save()
-                return make_response(jsonify(new.to_dict()), 201)
-
-            else:
-                return make_response(jsonify({"error": "Missing name"}), 400)
+            return make_response(jsonify({"error": "Missing name"}), 400)
 
     else:
-        if not request.get_json():
-            return make_response(jsonify({"error": "Not a JSON"}), 400)
-
         if not state_id:
             abort(404)
 
