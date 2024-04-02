@@ -23,8 +23,8 @@ def user(user_id=None):
             return jsonify(got)
 
         else:
-            user = ([user for user in all.values() if user.id
-                    == user_id])
+            user = ([user for user in all.values()
+                    if user.id == user_id])
             return jsonify(user[0].to_dict() if len(user) > 0 else abort(
                 404))
 

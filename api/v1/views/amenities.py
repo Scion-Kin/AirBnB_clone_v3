@@ -22,8 +22,8 @@ def amenity(amenity_id=None):
             return jsonify(got)
 
         else:
-            amenity = ([amenity for amenity in all.values() if amenity.id
-                       == amenity_id])
+            amenity = ([amenity for amenity in all.values()
+                       if amenity.id == amenity_id])
             return jsonify(amenity[0].to_dict() if len(amenity) > 0 else abort(
                 404))
 

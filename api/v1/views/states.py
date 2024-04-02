@@ -23,8 +23,8 @@ def state(state_id=None):
             return jsonify(got)
 
         else:
-            state = ([state for state in all.values() if state.id
-                     == state_id])
+            state = ([state for state in all.values()
+                     if state.id == state_id])
             return jsonify(state[0].to_dict() if len(state) > 0 else abort(
                 404))
 
