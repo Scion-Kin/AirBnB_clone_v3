@@ -91,8 +91,10 @@ class TestFileStorage(unittest.TestCase):
     def test_get(self):
         """" Test the get method that gets storage instances """
         self.assertIs(models.storage.get("State", "testid"), None)
+        self.assertIsNot(models.storage.get("State", "testid"), dict)
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_count(self):
         """" Test the get method that counts storage instances """
         self.assertIs(type(models.storage.count("State")), int)
+        self.assertGreaterEqual(models.storage.count("State"), 0)
