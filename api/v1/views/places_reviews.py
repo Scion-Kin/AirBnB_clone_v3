@@ -14,12 +14,13 @@ def get_and_make_reviews(place_id):
 
     if request.method == 'GET':
         place = [place for place in storage.all("Place").values()
-                if place.id == place_id]
+                 if place.id == place_id]
         if len(place) < 1:
             abort(404)
 
         reviews = ([review.to_dict() for review in
-                  storage.all("Review").values() if review.place_id == place_id])
+                   storage.all("Review").values()
+                   if review.place_id == place_id])
         return jsonify(reviews) if len(reviews) > 0 else jsonify([])
 
     elif request.method == 'POST':
@@ -28,7 +29,7 @@ def get_and_make_reviews(place_id):
             return make_response(jsonify({"error": "Not a JSON"}), 400)
 
         place = [place for place in storage.all("Place").values()
-                if place.id == place_id]
+                 if place.id == place_id]
         if len(place) < 1:
             abort(404)
 
