@@ -52,7 +52,7 @@ def create(state_id):
         return make_response(jsonify(new.to_dict()), 201)
 
     else:
-       return make_response(jsonify({"error": "Missing name"}), 400)
+        return make_response(jsonify({"error": "Missing name"}), 400)
 
 
 @app_views.route('/cities/<string:city_id>',
